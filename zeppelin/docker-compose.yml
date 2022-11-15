@@ -4,21 +4,22 @@ services:
     image: apache/zeppelin:0.10.1
     container_name: zeppelin
     environment:
-      ZEPPELIN_PORT: 8090
+      ZEPPELIN_PORT: 8080
       ZEPPELIN_JAVA_OPTS: >-
         -Dspark.driver.memory=1g
         -Dspark.executor.memory=2g
       SPARK_HOME: /opt/spark
-      MASTER: "spark://master:7077"
+      PYSPARK_PYTHON: /anaconda3/backend/bin/python
+      PYSPARK_DRIVER_PYTHON: /anaconda3/backend/bin/python
+      # HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+      # MASTER: "spark://172.16.33.43:7077"
+      # CORE_CONF_fs_defaultFS: "hdfs://namenode:8020"
+      # SPARK_MASTER: "spark://172.16.33.43:7077"
     ports:
-      - 8090:8090
+      - 8090:8080
+      - 4045:4040
     volumes:
-      - zeppelin:/opt/zeppelin
-      - opt:/opt/spark
+      - ./notebook:/opt/zeppelin/notebook
+      - /mnt/data/app/spark/:/opt/spark
+      - /home/tiennv/anaconda3/envs/backend:/anaconda3/backend
     restart: unless-stopped
-
-volumes:
-  zeppelin:
-    external: true
-  opt:
-    external: true
